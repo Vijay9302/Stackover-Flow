@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>detail</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <style>
+        .box{
+        display:none;
+        }
+        .ab{
+        display:block;
+        }
+    </style>
+</head>
+<body>
+<div style="display: inline-block;">
+    <form action="{% url 'main:like' question.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit"><i class="fas fa-thumbs-up"></i> </button>
+    </form>
+    {{question.votes}}
+    <form action="{% url 'main:dislike' question.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit"><i class="fas fa-thumbs-down"></i> </button>
+    </form>
+</div>
+<div style="display: inline-block;">
+    <p><b>Question</b> :- <b>{{question.question_text}}</b></p>
+</div>
+<h4>Description</h4>
+<P>{{question.description}}</P>
+<h4>{{ab|length}} Comments</h4>
+{%if ab %}
+    {% for n,m in ab %}
+    <p>{{m}} commented :- {{n}}</p>
+    {%endfor%}
+{%else %}
+    <p>No comment</p>
+{%endif %}
+
+<form action="" method="post">{% csrf_token %}
+    <label for="b">Add comment :- </label>
+    <input type="text" name="question_com" id="b" ></input>
+    <input type="hidden" name="q_id" value={{question.id}}>
+    <input type="submit" value="Add comment"></input>
+</form>
+
+
+<h4>{{question.answer_set.all.count}} Answers</h4>
+<hr>
+
+{% if imp %}
+<!--display answers-->
+        {% for ans,name,comment in imp %}
+            <div style="display: inline-block;">
+            <form action="{% url 'main:like' question.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" name="like" value="{{ans.id}}"><i class="fas fa-thumbs-up"></i> </button>
+            </form>
+            {{ans.votes}}
+            <form action="{% url 'main:dislike' question.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" name="dislike" value="{{ans.id}}"><i class="fas fa-thumbs-down"></i> </button>
+            </form>
+            </div>
+
+<div style="display: inline-block;">
+    {% if ans.is_verified %}
+    <i class="fas fa-check fa-2x" style="color: lawngreen;"></i>
+    {% endif %}
+    <p>{{name}} Answered :- {{ans}}</p>
+</div>
+            {%if comment|length %}
+                <h4>{{comment|length}} Comments</h4>
+                {%for com,com_name in comment %}
+                    <p>{{com_name}} commented :- {{com}}</p>
+                {%endfor%}
+            {%else %}
+                <p>No comment</p>
+            {%endif %}
+
+<button class="ab" onclick='fun({{forloop.counter0}})'>Add comment.</button>
+    <div class="box">
+        <form action="" method="post">{% csrf_token %}
+            <label for="a">Add comment :- </label>
+            <input type="text" name="comment" id="a" ></input>
+            <input type="hidden" name="answerid" value={{ans.id}}>
+            <input type="submit" value="Add comment"></input>
+        </form>
+    </div>
+
+<hr>
+        {%endfor%}
+    {% else %}
+    <h3>No Answers yet.</h3>
+    {%endif%}
+<br><br>
+
+<!--To take answer input-->
+
+<form action="" method="post">{% csrf_token %}
+    <label for="q">Add answer :- </label>
+    <input type="text" name="ans" id="q"></input>
+    <input type="submit" value="Add Answer"></input>
+</form>
+
+<br><br>
+<a href="{% url 'main:index'%}">Click to Go to Home page</a><br><br>
+<a href="{% url 'main:login'%}">Click to Go to login page</a><br><br>
+<a href="{% url 'main:registration'%}">Click to Go to registration page</a><br><br>
+<a href="{% url 'main:profile'%}">Click to Go to profile page</a><br><br>
+
+<script type="text/javascript">
+    function fun(a){
+        for(i=0;i<document.getElementsByClassName("ab").length;i++){
+        if(i==a){
+                var c=document.getElementsByClassName("ab")[i].style.display="none";
+                document.getElementsByClassName("box")[i].style.display="block";
+        }
+        else{
+                document.getElementsByClassName("ab")[i].style.display ="block";
+                document.getElementsByClassName("box")[i].style.display ="none";
+        }
+        }
+        }
+    function fun1(){
+                var c=document.getElementsByClassName("ab").style.display="none";
+                document.getElementsByClassName("box")[i].style.display="block";
+
+    }
+</script>
+</body>
+</html>

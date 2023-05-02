@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>profile Page</title>
+    <style>
+    .success{
+    color:red
+    }
+
+    </style>
+</head>
+<body>
+{% if messages %}
+{% for m in messages %}
+<small class="{{m.tags}}">{{m}}</small><br>
+{% endfor %}
+{% endif %}
+<h1> Welcome {{name}}</h1>
+<br>
+<h3>Question Asked :- </h3>
+{% if question %}
+    {% for a in question %}
+    <li><a href="{% url 'main:detail' a.id %}">{{ a }}</a></li>
+    {% endfor %}
+{%else %}
+    <h2>No questions asked.</h2>
+{% endif%}
+<br>
+<h3>Question Answered :- </h3>
+{% if answer_que %}
+{% for a in answer_que %}
+<li><a href="{% url 'main:detail' a.id %}">{{ a }}</a></li>
+{% endfor %}
+{%else %}
+<h2>Answered 0 Questions.</h2>
+{% endif%}
+
+    <br><br>
+    <a href="{% url 'main:index'%}">Click to Go to Home page</a><br><br>
+    <a href="{% url 'main:logout'%}">Logout</a>
+</body>
+</html>
